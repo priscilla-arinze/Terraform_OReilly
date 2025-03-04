@@ -71,27 +71,3 @@ resource "aws_instance" "example" {
   ami           = "ami-04b4f1a9cf54c11d0"
   instance_type = terraform.workspace == "default" ? "t2.medium" : "t2.micro"
 }
-
-
-## Variables
-variable "s3_bucket_name" {
-  description = "The name of the S3 bucket to store Terraform state"
-  type        = string
-  default     = "priscilla-terraform-up-and-running-state"
-}
-
-variable "dynamodb_table_name" {
-  description = "The name of the DynamoDB table to use for state locking"
-  type        = string
-  default     = "terraform-up-and-running-locks"
-}
-
-output "s3_bucket_arn" {
-  value       = aws_s3_bucket.terraform_state.arn
-  description = "The ARN of the S3 bucket to store Terraform state"
-}
-
-output "dynamodb_table_name" {
-  value       = aws_dynamodb_table.terraform_locks.name
-  description = "The name of the DynamoDB table to use for state locking"
-}
