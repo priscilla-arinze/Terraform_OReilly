@@ -2,17 +2,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-terraform {
-  backend "s3" {
-    bucket = "priscilla-terraform-up-and-running-state"
-    key    = "stage/services/webserver-cluster/terraform.tfstate"
-    region = "us-east-1"
-
-    dynamodb_table = "terraform-up-and-running-locks"
-    encrypt        = true
-  }
-}
-
 ### Resources
 # Can't use this in conjunction with the autoscaling group; need to use launch template instead (as of October 2024)
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template
