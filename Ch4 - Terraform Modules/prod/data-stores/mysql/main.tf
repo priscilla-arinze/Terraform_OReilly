@@ -5,7 +5,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "priscilla-terraform-up-and-running-state"
-    key    = "stage/data-stores/mysql/terraform.tfstate"
+    key    = "prod/data-stores/mysql/terraform.tfstate"
     region = "us-east-1"
 
     dynamodb_table = "terraform-up-and-running-locks"
@@ -16,7 +16,7 @@ terraform {
 module "mysql" {
   source = "../../../modules/data-stores/mysql"
 
-  db_env      = "stage"
+  db_env      = "prod"
   db_username = var.database_username # not sure if this will work
   db_password = var.database_password
 }
