@@ -1,3 +1,13 @@
+### Locals
+locals {
+  http_port    = 80
+  any_port     = 0
+  any_protocol = "-1"
+  tcp_protocol = "tcp"
+  all_ips      = ["0.0.0.0/0"]
+}
+
+
 ### Resources
 # Can't use this in conjunction with the autoscaling group; need to use launch template instead (as of October 2024)
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template
@@ -18,7 +28,7 @@
 
 resource "aws_launch_template" "example" {
   image_id        = "ami-04b4f1a9cf54c11d0"
-  instance_type   = "t2.micro"
+  instance_type   = var.instance_type
   vpc_security_group_ids = [aws_security_group.instance.id]
 
   user_data = base64encode(
@@ -67,8 +77,8 @@ resource "aws_autoscaling_group" "example" {
   target_group_arns = [aws_lb_target_group.asg.arn]
   health_check_type = "ELB"
 
-  min_size = 2
-  max_size = 10
+  min_size = var.min_size
+  max_size = var.max_size
 
   tag {
     key                 = "Name"
@@ -97,7 +107,7 @@ resource "aws_lb" "example" {
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.example.arn
-  port              = 80
+  port              = local.http_port
   protocol          = "HTTP"
 
   # By default, return a simple 404 page
@@ -149,18 +159,18 @@ resource "aws_security_group" "alb" {
 
   # Allow all inbound traffic on the HTTP port
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = local.http_port
+    to_port     = local.http_port
+    protocol    = local.tcp_protocol
+    cidr_blocks = local.all_ips
   }
 
   # Allow all outbound traffic on HTTP port
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = local.any_port
+    to_port     = local.any_port
+    protocol    = local.any_protocol
+    cidr_blocks = local.all_ips
   }
 }
 
