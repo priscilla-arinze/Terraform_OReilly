@@ -17,6 +17,6 @@ module "mysql" {
   source = "../../../modules/data-stores/mysql"
 
   db_env      = "stage"
-  db_username = var.database_username # not sure if this will work
+  db_username = var.database_username
   db_password = var.database_password
 }
