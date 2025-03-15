@@ -27,8 +27,8 @@ locals {
 # }
 
 resource "aws_launch_template" "example" {
-  image_id        = "ami-04b4f1a9cf54c11d0"
-  instance_type   = var.instance_type
+  image_id               = "ami-04b4f1a9cf54c11d0"
+  instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.instance.id]
 
   user_data = base64encode(
@@ -73,7 +73,7 @@ resource "aws_autoscaling_group" "example" {
     id = aws_launch_template.example.id
   }
 
-  vpc_zone_identifier  = data.aws_subnets.default.ids
+  vpc_zone_identifier = data.aws_subnets.default.ids
 
   target_group_arns = [aws_lb_target_group.asg.arn]
   health_check_type = "ELB"
@@ -161,23 +161,23 @@ resource "aws_security_group" "alb" {
 
 # Allow all inbound traffic on the HTTP port
 resource "aws_security_group_rule" "allow_http_inbound" {
-  type = "ingress"
+  type              = "ingress"
   security_group_id = aws_security_group.alb.id
-  
-  from_port = local.http_port
-  to_port = local.http_port
-  protocol = local.tcp_protocol
+
+  from_port   = local.http_port
+  to_port     = local.http_port
+  protocol    = local.tcp_protocol
   cidr_blocks = local.all_ips
 }
 
 # Allow all outbound traffic on HTTP port
 resource "aws_security_group_rule" "allow_all_outbound" {
-  type = "egress"
+  type              = "egress"
   security_group_id = aws_security_group_alb.id
 
-  from_port = local.any_port
-  to_port = local.any_port
-  protocol = local.any_protocol
+  from_port   = local.any_port
+  to_port     = local.any_port
+  protocol    = local.any_protocol
   cidr_blocks = local.all_ips
 }
 
