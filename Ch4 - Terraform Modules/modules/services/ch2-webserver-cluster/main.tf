@@ -33,7 +33,8 @@ resource "aws_launch_template" "example" {
 
   user_data = base64encode(
     templatefile(
-      "user-data.sh",
+      # path.module is the absolute filesystem path of the module where this file is located
+      "${path.module}/user-data.sh",
       {
         server_port = var.server_port
         db_address  = data.terraform_remote_state.db.outputs.address
