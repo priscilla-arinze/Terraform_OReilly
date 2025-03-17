@@ -173,7 +173,7 @@ resource "aws_security_group_rule" "allow_http_inbound" {
 # Allow all outbound traffic on HTTP port
 resource "aws_security_group_rule" "allow_all_outbound" {
   type              = "egress"
-  security_group_id = aws_security_group_alb.id
+  security_group_id = aws_security_group.alb.id
 
   from_port   = local.any_port
   to_port     = local.any_port
