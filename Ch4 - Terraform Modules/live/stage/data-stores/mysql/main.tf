@@ -14,7 +14,7 @@ terraform {
 }
 
 module "mysql" {
-  source = "../../../modules/data-stores/mysql"
+  source = "git::https://github.com/priscilla-arinze/Terraform_OReilly_Modules.git//data-stores/mysql?ref=v0.0.1-stage"
 
   db_env      = "stage"
   db_username = var.database_username

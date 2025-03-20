@@ -16,7 +16,7 @@ terraform {
 
 ### Modules
 module "webserver_cluster" {
-    source = "../../../modules/services/ch2-webserver-cluster"
+    source = "git::https://github.com/priscilla-arinze/Terraform_OReilly_Modules.git//services/ch2-webserver-cluster?ref=v0.0.1-prod"
 
     cluster_name = "webservers-prod"
     db_remote_state_bucket = "priscilla-terraform-up-and-running-state"
