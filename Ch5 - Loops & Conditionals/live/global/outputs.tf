@@ -4,10 +4,14 @@
 # }
 
 # output "all_arns" {
-#     value       = module.users[*].user_arn
+#     value       = values(aws_iam_user.example)[*].arn
 #     description = "The ARNs for all users"
 # }
 
-output "all_users" {
-  value = aws_iam_user.example
+# output "all_users" {
+#   value = aws_iam_user.example
+# }
+
+output "user_arns" {
+    value = values(module.users)[*].user_arn
 }
