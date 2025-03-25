@@ -15,3 +15,11 @@
 output "user_arns" {
     value = values(module.users)[*].user_arn
 }
+
+output "upper_names" {
+    value = [for name in var.user_names : upper(name)]
+}
+
+output "short_upper_names" {
+    value = [for name in var.user_names : upper(name) if length(name) < 5]
+}
