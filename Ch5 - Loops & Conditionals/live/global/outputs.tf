@@ -23,3 +23,7 @@ output "upper_names" {
 output "short_upper_names" {
     value = [for name in var.user_names : upper(name) if length(name) < 5]
 }
+
+output "occupations" {
+    value = [for name, occupation in var.user_occupations : "${name} is a ${occupation}"]
+}
