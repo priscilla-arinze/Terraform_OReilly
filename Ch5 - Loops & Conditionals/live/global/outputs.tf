@@ -27,3 +27,7 @@ output "short_upper_names" {
 output "occupations" {
     value = [for name, occupation in var.user_occupations : "${name} is a ${occupation}"]
 }
+
+output "upper_occupations" {
+    value = {for name, occupation in var.user_occupations : upper(name) => upper(occupation)}
+}
