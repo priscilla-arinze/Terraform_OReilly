@@ -30,4 +30,15 @@ output "occupations" {
 
 output "upper_occupations" {
     value = {for name, occupation in var.user_occupations : upper(name) => upper(occupation)}
+    # Returns { "PRISCILLA" = "ENGINEER", "MARK" = "MANAGER", "LISA" = "DESIGNER" }
+}
+
+output "string_for_directive_names" {
+    value = "%{ for name in var.user_names }${name}, %{ endfor }"
+    # Returns "priscilla, mark, lisa, "
+}
+
+output "string_for_directive_index_names" {
+    value = "%{ for i, name in var.user_names }(${i+1}) ${name}, %{ endfor }"
+    # Returns "(1) priscilla, (2) mark, (3) lisa, "
 }
