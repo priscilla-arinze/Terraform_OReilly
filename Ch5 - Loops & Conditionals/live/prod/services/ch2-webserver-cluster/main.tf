@@ -21,9 +21,16 @@ module "webserver_cluster" {
     cluster_name = "webservers-prod"
     db_remote_state_bucket = "priscilla-terraform-up-and-running-state"
     db_remote_state_key    = "prod/data-stores/mysql/terraform.tfstate"
-    instance_type          = "t2.micro" # can opt for a larger instance (m4.large [not on free tier]) for production
-    min_size               = 2
-    max_size               = 10
+
+    instance_type = "t2.micro" # can opt for a larger instance (m4.large [not on free tier]) for production
+    min_size      = 2
+    max_size      = 10
+
+    custom_tags = {
+      Owner       = "team-priscilla"
+      ManagedBy   = "Terraform"
+      Environment = "Production"
+    }
 }
 
 
