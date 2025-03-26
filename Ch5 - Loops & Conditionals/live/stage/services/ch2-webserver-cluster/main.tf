@@ -29,6 +29,8 @@ module "webserver_cluster" {
       ManagedBy   = "Terraform"
       Environment = "Stage"
     }
+
+    enable_autoscaling = false
 }
 
 resource "aws_security_group_rule" "allow_testing_inbound" {

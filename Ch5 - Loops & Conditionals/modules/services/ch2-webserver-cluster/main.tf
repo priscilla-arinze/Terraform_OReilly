@@ -191,6 +191,31 @@ resource "aws_security_group_rule" "allow_all_outbound" {
   cidr_blocks = local.all_ips
 }
 
+resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
+  count = var.enable_autoscaling ? 1 : 0 # creates 1 resource if var.enable_autoscaling is true
+
+  scheduled_action_name = "${var.cluster_name}-scale-out-during-business-hours"
+  min_size              = 2
+  max_size              = 10
+  desired_capacity      = 10
+  recurrence            = "0 9 * * *" # 9am UTC every day
+
+  autoscaling_group_name = aws_autoscaling_group.example.name
+}
+
+resource "aws_autoscaling_schedule" "scale_in_at_night" {
+  count = var.enable_autoscaling ? 1 : 0 # creates 1 resource if var.enable_autoscaling is true
+
+  scheduled_action_name = "${var.cluster_name}-scale-in-at-night"
+  min_size              = 2
+  max_size              = 10
+  desired_capacity      = 2
+  recurrence            = "0 17 * * *" # 5pm UTC every day
+
+  autoscaling_group_name = aws_autoscaling_group.example.name
+}
+
+
 ### Data Sources
 data "aws_vpc" "default" {
   default = true
