@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "us-east-1"
+  region = "us-east-1"
 }
 
 terraform {
@@ -14,31 +14,31 @@ terraform {
 }
 
 module "webserver_cluster" {
-    source = "../../../../modules/services/ch2-webserver-cluster"
+  source = "../../../../modules/services/ch2-webserver-cluster"
 
-    cluster_name           = "webservers-stage"
-    db_remote_state_bucket = "priscilla-terraform-up-and-running-state"
-    db_remote_state_key    = "stage/data-stores/mysql/terraform.tfstate"
+  cluster_name           = "webservers-stage"
+  db_remote_state_bucket = "priscilla-terraform-up-and-running-state"
+  db_remote_state_key    = "stage/data-stores/mysql/terraform.tfstate"
 
-    instance_type = "t2.micro"
-    min_size      = 2
-    max_size      = 2
+  instance_type = "t2.micro"
+  min_size      = 2
+  max_size      = 2
 
-    custom_tags = {
-      Owner       = "team-priscilla"
-      ManagedBy   = "Terraform"
-      Environment = "Stage"
-    }
+  custom_tags = {
+    Owner       = "team-priscilla"
+    ManagedBy   = "Terraform"
+    Environment = "Stage"
+  }
 
-    enable_autoscaling = false
+  enable_autoscaling = false
 }
 
 resource "aws_security_group_rule" "allow_testing_inbound" {
-  type = "ingress"
+  type              = "ingress"
   security_group_id = module.webserver_cluster.alb_security_group_id
 
-  from_port = 12345
-  to_port = 12345
-  protocol = "tcp"
+  from_port   = 12345
+  to_port     = 12345
+  protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 }
