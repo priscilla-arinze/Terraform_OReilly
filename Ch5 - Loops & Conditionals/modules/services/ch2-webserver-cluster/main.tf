@@ -88,7 +88,11 @@ resource "aws_autoscaling_group" "example" {
   }
 
   dynamic "tag" {
-    for_each = var.custom_tags
+    for_each = {
+      for key, value in var.custom_tags:
+      key => upper(value) # Convert tag values to uppercase
+      if key != "Name" # Exclude the Name tag to avoid duplication
+    }
 
     content {
       key                 = tag.key
