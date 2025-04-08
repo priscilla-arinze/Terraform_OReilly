@@ -67,3 +67,12 @@ ${name}%{ if i < length(var.user_names) - 1 }, %{ endif }
 EOF
     # Returns "priscilla, mark, lisa"
 }
+
+output "string_for_directive_index_names_with_if_else_stripped" {
+    value = <<EOF
+%{~ for i, name in var.user_names ~}
+${name}%{ if i < length(var.user_names) - 1 }, %{ else }. %{ endif }
+%{~ endfor ~}
+EOF
+    # Returns "priscilla, mark, lisa."
+}
