@@ -44,10 +44,26 @@ output "string_for_directive_index_names" {
 }
 
 output "string_for_directive_index_names_with_condition" {
+    # Note: For HEREDOC, make sure to omit the leading whitespace before the for directive
     value = <<EOF
-    %{ for i, name in var.user_names }
-        ${name}%{ if i < length(var.user_names) - 1 }, %{ endif }
-    %{ endfor }
+%{ for i, name in var.user_names }
+${name}%{ if i < length(var.user_names) - 1 }, %{ endif }
+%{ endfor }
+EOF
+    # Returns "priscilla, 
+
+             # mark, 
+
+             # lisa"
+}
+
+output "string_for_directive_index_names_with_condition_stripped" {
+    # This is the same as the previous output, but with the leading and trailing whitespace removed using ~
+    # Note: To strip the whitespace, make sure to omit any whitspace between ~ and curly braces
+    value = <<EOF
+%{~ for i, name in var.user_names ~}
+${name}%{ if i < length(var.user_names) - 1 }, %{ endif }
+%{~ endfor ~}
 EOF
     # Returns "priscilla, mark, lisa"
 }
