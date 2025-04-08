@@ -42,3 +42,12 @@ output "string_for_directive_index_names" {
     value = "%{ for i, name in var.user_names }(${i+1}) ${name}, %{ endfor }"
     # Returns "(1) priscilla, (2) mark, (3) lisa, "
 }
+
+output "string_for_directive_index_names_with_condition" {
+    value = <<EOF
+    %{ for i, name in var.user_names }
+        ${name}%{ if i < length(var.user_names) - 1 }, %{ endif }
+    %{ endfor }
+EOF
+    # Returns "priscilla, mark, lisa"
+}
