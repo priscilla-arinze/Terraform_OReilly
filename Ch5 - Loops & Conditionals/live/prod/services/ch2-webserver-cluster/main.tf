@@ -18,6 +18,9 @@ terraform {
 module "webserver_cluster" {
     source = "../../../../modules/services/ch2-webserver-cluster"
 
+    ami         = "ami-04b4f1a9cf54c11d0"
+    server_text = "New server text - prod"
+
     cluster_name = "webservers-prod"
     db_remote_state_bucket = "priscilla-terraform-up-and-running-state"
     db_remote_state_key    = "prod/data-stores/mysql/terraform.tfstate"

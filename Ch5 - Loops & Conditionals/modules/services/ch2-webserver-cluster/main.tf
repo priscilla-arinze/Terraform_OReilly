@@ -27,7 +27,9 @@ locals {
 # }
 
 resource "aws_launch_template" "example" {
-  image_id               = "ami-04b4f1a9cf54c11d0"
+  name = "${var.cluster_name}-launch-template"
+
+  image_id               = var.ami
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.instance.id]
 
@@ -39,11 +41,12 @@ resource "aws_launch_template" "example" {
         server_port = var.server_port
         db_address  = data.terraform_remote_state.db.outputs.address
         db_port     = data.terraform_remote_state.db.outputs.port
+        server_text = var.server_text
       }
     )
   )
 
-  # Required when using a launch configuration with an auto scaling group
+  # Required when using a launch template/configuration with an auto scaling group
   lifecycle {
     create_before_destroy = true
   }
@@ -69,6 +72,10 @@ resource "aws_launch_template" "example" {
 # }
 
 resource "aws_autoscaling_group" "example" {
+  # Explicitly depend on launch template's name so each time it's replaced,
+  # the ASG will be replaced as well
+  name = "${var.cluster_name}-${aws_launch_template.example.name}-${aws_launch_template.example.latest_version}"
+
   launch_template {
     id = aws_launch_template.example.id
   }
@@ -80,6 +87,16 @@ resource "aws_autoscaling_group" "example" {
 
   min_size = var.min_size
   max_size = var.max_size
+
+  # Wait for at least this many instances to pass health checks before
+  # considering the ASG deployment complete
+  min_elb_capacity = var.min_size
+
+  # When replacing this ASG, create replacement first, and then destroy the old one
+  # (instead of the default behavior of destroying the old one first)
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tag {
     key                 = "Name"
